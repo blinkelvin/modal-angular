@@ -14,7 +14,7 @@ Para desenvolvimento
 npm run start
 ```
 
-Para gerar pacote
+Para gerar versão final
 ```
 npm run build
 ```

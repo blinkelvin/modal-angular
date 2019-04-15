@@ -1,0 +1,22 @@
+.row {
+  display: flex;
+}
+
+.toasted {
+
+  &.warning {
+    background-color: #fcf7de;
+    color: #b2822f;
+  }
+
+  &.danger {
+    background-color: #ffcfce;
+    color: #a70000;
+  }
+
+  border: 1px solid #0000000f;
+  padding: 13px;
+  text-align: center;
+  justify-content: center;
+  font-size: 13px;
+}

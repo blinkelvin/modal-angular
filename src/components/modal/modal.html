@@ -1,0 +1,153 @@
+<div class="modal">
+  <div class="header">
+    <h1 class="title-header">Assine o Sexlog VIP</h1>
+    <a class="button-exit">X</a>
+  </div>
+
+  <div class="breadcrumb" ng-show="modal.stepIndex <= 1">
+    <a class="breadcrumb-option" ng-class="{active: modal.stepIndex === 0}">
+      Escolha o plano ideal pra você
+    </a>
+    <a class="breadcrumb-option" ng-class="{active: modal.stepIndex === 1}">
+      Escolha a forma de pagamento
+    </a>
+  </div>
+
+  <!--PLANS-->
+  <div class="main prices" ng-show="modal.stepIndex===0">
+    <div class="col-prices">
+      <div class="price-container">
+        <div class="price">
+          <span class="currency" ng-bind="modal.plans[modal.optionIndex].price.currency"></span>
+          <span class="integer" ng-bind="modal.plans[modal.optionIndex].price.integer"></span>
+          <span class="decimal" ng-bind="modal.plans[modal.optionIndex].price.decimal"></span>
+          <span class="periodicy" ng-bind="modal.plans[modal.optionIndex].price.periodicy"></span>
+        </div>
+      </div>
+
+      <div class="details" ng-bind="modal.plans[modal.optionIndex].total"></div>
+
+      <div class="description">
+        <hr/>
+        <div class="row">
+          <div class="icon" ng-include="'src/assets/img/icon-credit-card.svg'"></div>
+          <div class="label" ng-bind-html="modal.plans[modal.optionIndex].payments[0]"></div>
+        </div>
+        <div class="row">
+          <div class="icon" ng-include="'src/assets/img/icon-debit.svg'"></div>
+          <div class="label" ng-bind-html="modal.plans[modal.optionIndex].payments[1]"></div>
+        </div>
+        <div class="row">
+          <div class="icon" ng-include="'src/assets/img/icon-boleto.svg'"></div>
+          <div class="label" ng-bind-html="modal.plans[modal.optionIndex].payments[2]"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-options">
+      <a
+        class="row-option"
+        ng-class="{active: index === modal.optionIndex}"
+        ng-click="modal.changeIndex(index)"
+        ng-repeat="(index, plan) in modal.plans"
+      >
+        <input type="radio" ng-checked="index === modal.optionIndex">
+        <span class="checkmark"></span>
+        <span>{{plan.name}}</span>
+        <span class="discount" ng-bind="plan.discount"></span>
+      </a>
+    </div>
+  </div>
+
+
+  <!--PAYMENT-->
+  <div class="main payment" ng-show="modal.stepIndex===1">
+    <div class="row">
+      Plano escolhido: <b>{{modal.plans[modal.optionIndex].name}} {{modal.plans[modal.optionIndex].discount ? '- ' + modal.plans[modal.optionIndex].discount : ''}}</b>
+    </div>
+    <hr />
+    <form id="paymentForm" ng-submit="modal.submitPayment()">
+      <div class="row">
+        <div class="input-container input-name">
+          <label>Número do cartão</label>
+          <input
+            type="text"
+            class="card-input"
+            ng-model="modal.creditCard"
+            placeholder="Número do cartão"
+            ng-change="modal.changeCreditCard()"
+            ng-model-options="{allowInvalid:true}"
+            ui-credit-card-mask
+            required
+          />
+          <img class="card-image" src="/src/assets/img/card.png"/>
+        </div>
+        <div class="input-container">
+          <label>Validade</label>
+          <div>
+            <select type="text" required>
+              <option value="" disabled selected>Mês</option>
+              <option ng-repeat="month in [].constructor(12) track by $index">{{$index + 1}}</option>
+            </select>
+            <select type="text" required>
+              <option value="" disabled selected>Ano</option>
+              <option ng-repeat="month in [].constructor(30) track by ($index + 2019)">{{$index + 2019}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-container input-name">
+          <label>Nome do titular</label>
+          <input type="text" placeholder="Nome do titular" required>
+        </div>
+        <div class="input-container">
+          <label>Código de segurança</label>
+          <input type="text" placeholder="CVV" maxLength="3" required>
+        </div>
+      </div>
+
+      <div class="row toasted warning" ng-show="!modal.showErrorMessages">
+        <span>Para sua privacidade, a cobrança será feita em nome de "assinet-pgto-sl".</span>
+      </div>
+
+      <div class="row toasted danger" ng-show="modal.showErrorMessages">
+        <span>Número de cartão inválido.</span>
+      </div>
+    </form>
+  </div>
+
+  <div class="main finish" ng-show="modal.stepIndex===2">
+    <div class="icon">
+      <div class="icon" ng-include="'src/assets/img/icon-check_circle.svg'"></div>
+    </div>
+
+    <div class="message">
+      <h1>Parabéns!</h1>
+      <h1>Você agora é um assinante Sexlog!</h1>
+    </div>
+  </div>
+
+  <div class="footer">
+    <img src="/src/assets/img/icon-secure.png"/>
+
+    <a class="button-default" ng-click="modal.nextStep()" ng-show="modal.stepIndex === 0">
+      <span>Próximo passo: pagamento</span>
+    </a>
+
+    <input
+      type="submit"
+      form="paymentForm"
+      class="button-default"
+      ng-show="modal.stepIndex === 1"
+      value="Concluir minha assinatura"
+    />
+
+    <a class="button-default button-secondary" href="https://pt-br.sexlog.com/"
+       ng-show="modal.stepIndex === 2">
+      <span>Explorar o Sexlog</span>
+    </a>
+
+  </div>
+</div>
